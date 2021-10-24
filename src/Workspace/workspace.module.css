@@ -1,0 +1,41 @@
+.workspace{
+    display: flex;
+    justify-content: stretch;
+    padding-top: 100px;
+}
+
+.taskbar{
+    flex:1 1 40%;
+    padding-right: 20px;
+}
+
+.timer{
+    flex:1 1 60%;
+}
+
+.taskbar > .header {
+    font-family: SFB, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+}
+
+.taskbar > .list {
+    list-style-type: none;
+    padding: 18px;
+    font-family: SFR, sans-serif;
+}
+
+.taskbar > .list > li::before {
+    content: "•";
+    position: absolute;
+    left: -18px;
+    font-size: 16px;    
+    color: var(--red-dark);
+}
+
+.taskbar > .list > li{
+    position: relative;
+    font-size: 16px;
+    line-height: 33px;
+}

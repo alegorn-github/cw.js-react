@@ -1,0 +1,130 @@
+.timer {
+    padding-bottom: 100px;
+    background-color: var(--gray-lightest-F4);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background-color: var(--gray-light-C4);
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 17px;    
+    color: var(--white);
+}
+
+.header > .taskName {
+    font-family: SFB,sans-serif;
+    font-weight: bold;
+}
+
+.clock {
+    padding-top: 70px;
+    font-family: SFL,sans-serif;
+    text-align: center;
+}
+
+.numbers {
+    position: relative;
+    display: inline-block;
+    font-weight: 200;
+    font-size: 150px;
+    line-height: 179px;
+    color: var(--gray-dark-33);
+}
+
+.addButton {
+    position: absolute;
+    border: none;
+    padding: 0;
+    top: 50%;
+    right: -75px;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--white);
+    transform: translateY(-50%);
+    fill: var(--gray-light-C4);
+}
+
+.addButton:hover,.addButton:active{
+    fill: var(--green-dark);
+}
+
+.addButton:disabled {
+    fill: var(--gray-light-C4);
+}
+
+.taskInfo {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.taskNumber {
+    color: var(--gray-99);
+}
+
+.toolBar {
+    text-align: center;
+}
+
+.timerButton {
+    padding: 20px 50px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+.leftButton {
+    margin-right: 25px;
+    border: 2px solid var(--green);
+    background-color: var(--green);
+    color: var(--white);
+}
+
+.leftButton:hover, .leftButton:active{
+    border-color: var(--green-dark);
+    background-color: var(--green-dark);
+}
+
+.leftButton:disabled {
+    border-color: var(--gray-light-C4);
+    background-color: transparent;
+    color: var(--gray-light-C4);
+}
+
+
+.rightButton {
+    border: 2px solid var(--red);
+    color: var(--red);
+}
+
+.rightButton:hover,.rightButton:active {
+    border-color: var(--red);
+    background-color: var(--red);
+    color: var(--white);
+}
+
+.rightButton:disabled {
+    border-color: var(--gray-light-C4);
+    background-color: transparent;
+    color: var(--gray-light-C4);
+}
+
+.header.running {
+    background-color: var(--red);
+}
+
+.numbers.running {
+    color: var(--red);
+}
+
+.header.break {
+    background-color: var(--green);
+}
+
+.numbers.break {
+    color: var(--green);
+}

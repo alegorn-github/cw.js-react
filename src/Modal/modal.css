@@ -1,0 +1,78 @@
+.modalBackground {
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal {
+    position: fixed;
+    z-index: 11;
+    top:50%;
+    left: 50%;
+    background-color: var(--white);
+    transform: translate(-50%,-50%);
+}
+
+.modal__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 84px;
+}
+
+.modal__closeButton {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    fill: var(--gray-light-C4);
+}
+
+.modal__closeButton:hover,.modal__closeButton:active,.modal__closeButton:focus{
+    fill: var(--green-dark);
+}
+
+.modal__header {
+    display: inline-block;
+    margin-bottom: 25px;
+    font-size: 24px;
+    line-height: 17px;    
+}
+
+.modal__submitButton{
+    display: block;
+    margin-bottom: 10px;
+    padding: 19px 50px;
+    border: none;
+    font-weight: 500;
+    background-color: var(--red);
+    outline: none;
+    color: var(--white);
+}
+
+.modal__submitButton:hover,.modal__submitButton:active,.modal__submitButton:focus{
+    background-color: var(--red-dark);
+}
+
+.modal__cancelButton{
+    display: block;
+    padding: 0 0 ;
+    border: none;
+    border-bottom: 1px solid var(--gray-dark-33);
+    background-color: transparent;
+    font-weight: 300;
+    color: var(--gray-dark-33);
+    outline: none;
+}
+
+.modal__cancelButton:hover, .modal__cancelButton:active, .modal__cancelButton:focus {
+    border-bottom: 1px solid var(--green-dark);
+    color: var(--green-dark);
+}

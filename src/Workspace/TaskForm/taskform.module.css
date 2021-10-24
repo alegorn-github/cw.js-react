@@ -1,0 +1,44 @@
+.taskForm{
+    margin-bottom: 25px;
+}
+
+.taskForm > input{
+    display: block;
+    width: 370px;
+    margin-bottom: 25px;
+    padding: 19px 15px;
+    border: none;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 17px;    
+    background: var(--gray-lightest-F4);
+    color: var(--gray-dark-33);
+    outline: none;
+}
+
+.taskForm > button {
+    padding: 19px 50px;
+    border: none;
+    background: none;
+    background-color: var(--green);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 17px;    
+    color: var(--white);
+    outline: none;
+    transition: background-color var(--state-delay);
+}
+
+.taskForm > button:focus,.taskForm > button:hover, .taskForm > button:active {
+    background-color: var(--green-dark);
+}
+
+.taskForm > button:disabled {
+    background-color: var(--gray-light-C4);
+}
+
+
+.taskForm > button::placeholder {
+    color: var(--gray-lightest-F4);
+}

@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    box-shadow: 0px 10px 63px rgba(0, 0, 0, 0.07);
+    background-color: var(--white);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.logo, .logo:visited {
+    color: var(--red);
+}
+
+.logo > svg {
+    margin-right: 14px;
+}
+
+.dashboardLink {
+    display: flex;
+    align-items: flex-end;
+    font-size: 16px;
+    font-family: SFL,sans-serif;
+}
+
+.dashboardLink > svg {
+    margin-right: 9px;
+}
+
+.dashboardLink, .dashboardLink:visited {
+    color: var(--red);
+}

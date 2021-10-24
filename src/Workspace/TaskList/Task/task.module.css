@@ -1,0 +1,121 @@
+.task{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 19px 0;
+    border-top: 1px solid var(--gray-lightest-E4);
+    color: var(--gray-dark-33);
+}
+
+.task:last-child{
+    border-bottom: 1px solid var(--gray-lightest-E4);
+}
+
+.pomodoroCounter{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    /* padding: 5px 9px; */
+    border: 1px solid #C4C4C4;
+    border-radius: 50%;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 23px;   
+    text-align: center; 
+}
+
+.menuButton {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    fill: var(--gray-light-C4)
+}
+
+.menuButton:hover,.menuButton:focus,.menuButton:active {
+    fill: var(--green-dark);
+}
+
+.menu {
+    position: absolute;
+    padding: 5px 0 5px;
+    top: 7px;
+    left:50%;
+    border: 1px solid var(--gray-light-C4);
+    background-color: var(--white);
+    transform: translateX(-50%);
+}
+
+.menu::before,.menu::after{
+    content: '';
+    position: absolute;
+    left: 50%;;
+    border-width: 7px;
+    border-style: solid;
+    transform: translateX(-50%);
+}
+
+.menu::after {
+    top:-13px;
+    border-color: transparent transparent var(--white) transparent;
+}
+
+.menu::before {
+    top:-14px;
+    border-color: transparent transparent var(--gray-light-C4) transparent;
+}
+
+
+.menuItem {
+    display: flex;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    background-color: var(--white);
+    color: var(--gray-99);
+    outline: none;
+}
+
+.menuItem:hover,.menuItem:active,.menuItem:focus {
+    background-color: var(--gray-lightest-F4);
+}
+
+.menuItem > svg {
+    margin-right: 9px;
+    fill: var(--green);
+}
+
+.menuItem:disabled > svg {
+    margin-right: 9px;
+    fill: var(--gray-light-C4);
+}
+
+.menuItem:disabled {
+    background-color: var(--white);
+}
+
+.taskName {
+    display: inline-block;
+    padding: 5px;
+}
+
+.taskName.taskIsEdited {
+    display: none;
+}
+
+.taskName.taskCompleted {
+    color: var(--gray-light-C4);
+    text-decoration: line-through;
+}
+
+.taskInput {
+    display: none;
+    padding: 5px;
+    border: none;
+    background-color: var(--gray-lightest-F4);
+    outline: none;
+}
+
+.taskInput.taskIsEdited {
+    display: inline-block;
+}

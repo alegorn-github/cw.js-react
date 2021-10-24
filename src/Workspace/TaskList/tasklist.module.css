@@ -1,0 +1,14 @@
+.taskList {
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    color: var(--gray-dark-33);
+    list-style-type: none;
+}
+
+.totalTime {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 17px;
+    color: var(--gray-99);    
+}
