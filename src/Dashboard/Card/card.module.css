@@ -1,0 +1,59 @@
+.card {
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px;
+}
+
+.card.orange {
+    background-color: var(--orange);
+}
+
+.card.purple {
+    background-color: var(--purple);
+}
+
+.card.blue {
+    background-color: var(--blue);
+}
+
+
+.card > svg {
+    stroke: var(--gray-light-C4);
+}
+
+.card.orange > svg {
+    stroke: var(--orange-dark);
+}
+
+.card.purple > svg {
+    stroke: var(--purple-dark);
+}
+
+.card.blue > svg {
+    stroke: var(--blue-dark);
+}
+
+.sign {
+    display: flex;
+    flex:1 1 60%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.header {
+    margin: 0;
+    padding: 0;
+    font-family: 'SFB';
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;    
+}
+
+.stat {
+    font-size: 64px;
+    line-height: 76px;    
+}
+

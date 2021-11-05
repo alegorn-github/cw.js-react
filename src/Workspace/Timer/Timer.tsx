@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import { AppContext, TTask } from '../../App';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { AppContext, TTask, weekTemplate} from '../../App';
 import { getClassName} from '../../tools/getClassName';
+import {getMonday} from '../../tools/getMonday';
 import styles from './timer.module.css';
 
 interface ITimer {
-    // name: string;
-    // currentPomodoro: number;
     taskIndex: number;
 }
 
@@ -37,7 +36,12 @@ let completedPomodoros = 0;
 
 let timerInterval:NodeJS.Timer;
 let timerStart:Date,timerEnd:Date;
+let pauseStart:Date,pomodoroStart:Date;
 let timerRemainMs = 0;
+
+const monday = getMonday(new Date());
+const weekDay = (new Date()).getDay();
+let dayStat = {breaks:0,pausedS:0,pomodoroTimeS:0,pomodoros:0,workS:0};
 
 export function Timer({taskIndex}:ITimer){
     const [appState,setAppState] = useContext(AppContext);
@@ -47,6 +51,11 @@ export function Timer({taskIndex}:ITimer){
     const [seconds,setSeconds] = useState<number>(getMinutesAndSeconds(taskTime*60000)[1]);
     const [timerCondition,setTimerCondition] = useState<TTimerCondition>('Waiting');
 
+    // const monday = getMonday(new Date());
+    const savedWeekStat = appState.statistic.find((stat)=>stat.monday===monday)?.stat||weekTemplate;
+    dayStat = savedWeekStat[weekDay];
+
+    // dayStat = {...dayTemplate};
     timerRemainMs = timerRemainMs || taskTime*60*1000;
     currentTask = ~taskIndex ? appState.taskList[taskIndex] : emptyTask;
     
@@ -64,6 +73,8 @@ export function Timer({taskIndex}:ITimer){
                 moveTimerCondition('Paused')
             }},
             rightButton:{title:'Стоп', onClick: ()=>{
+                calcPomodoroTimeStat();
+                calcBreakStat();
                 stopTimer();
                 moveTimerCondition('Waiting');
             }},
@@ -122,18 +133,35 @@ export function Timer({taskIndex}:ITimer){
         return [minutes,seconds];
     }
 
-    function completePomodoro(pomodoros:number = 1){
+    const saveStat = useCallback(() => {
+        const newStatistic = [...appState.statistic];
+        if (newStatistic[newStatistic.length - 1]?.monday !== monday){
+            let newWeekStatistic = weekTemplate;
+            newWeekStatistic[weekDay] = dayStat;
+            newStatistic.push({monday:monday,stat:newWeekStatistic});
+        }
+        else {
+            newStatistic[newStatistic.length - 1].stat[weekDay] = dayStat;
+        }
+
+        setAppState({statistic:[...newStatistic]});
+
+    },[appState.statistic,setAppState]);
+
+    const completePomodoro = useCallback((pomodoros:number = 1)=>{
         let taskList = [...appState.taskList];
         taskList[taskIndex].completedPomodoros = taskList[taskIndex].completedPomodoros + pomodoros;
         if (taskList[taskIndex].completedPomodoros === taskList[taskIndex].pomodoros) {
             taskList = taskList.filter((task,index)=> index !== taskIndex );
         }
-        setAppState((prevState)=>({...prevState,taskList:[...taskList]}));
+        setAppState({taskList:[...taskList]});
         completedPomodoros++;
-    }
+        calcPomodoroStat(pomodoros);
+        calcPomodoroTimeStat();
+        saveStat();
+    },[appState.taskList,saveStat,setAppState,taskIndex]);
 
     function moveTimerCondition(newCondition:TTimerCondition){
-        console.log('Move condition to ',newCondition);
         setTimerCondition(newCondition);
     }
 
@@ -147,37 +175,69 @@ export function Timer({taskIndex}:ITimer){
         return newDate;
     }
 
-    function startTimer(timerTimeSec:number = timerRemainMs/1000){
+    function calcPomodoroStat(pomodoros:number){
+        dayStat.pomodoros += pomodoros;
+    }
+
+    function calcBreakStat(){
+        dayStat.breaks++;
+    }
+
+    function calcWorkStat(){
+        dayStat.workS += ((new Date()).getTime() - timerStart.getTime())/1000;
+    }
+
+    function calcPausedStat(){
+        dayStat.pausedS += ((new Date()).getTime() - pauseStart.getTime())/1000;
+    }
+
+    function calcPomodoroTimeStat(){
+        dayStat.pomodoroTimeS += ((new Date()).getTime() - pomodoroStart.getTime())/1000;
+    }
+
+    const startTimer = useCallback((timerTimeSec:number = timerRemainMs/1000)=>{
         clearInterval(timerInterval);
+        if (timerCondition === 'Paused' || timerCondition === 'BreakPaused'){
+            calcPausedStat();
+            saveStat();
+        }
         timerStart = new Date();
         timerEnd = addMinutes(timerStart,timerTimeSec/60);
         timerRemainMs = timerTimeSec*1000;
         timerInterval = setTimeout(()=>{setTik(!tik)},timerUpdateIntervalMs);
-    }
+        if (timerCondition === 'Waiting') {
+            pomodoroStart = new Date();
+        }
+    },[saveStat,tik,timerCondition,timerUpdateIntervalMs]);
 
     function pauseTimer(){
+        pauseStart = new Date();
         clearInterval(timerInterval);
     };
 
-    function stopTimer(){
-        clearInterval(timerInterval);
-        timerRemainMs = taskTime*60*1000;
-        updateTimerRemain();        
-    }
-
-    function updateTimerRemain(){
+    const updateTimerRemain = useCallback(()=>{
         const [minutes,seconds] = getMinutesAndSeconds(timerRemainMs);
         setMinutes(minutes);
         setSeconds(seconds);
-    }
+    },[]);
 
-    function timerTik(){
+    const stopTimer = useCallback(()=>{
+        clearInterval(timerInterval);
+        if (timerCondition === 'Running'){
+            calcWorkStat();
+            saveStat();
+        }
+        timerRemainMs = taskTime*60*1000;
+        updateTimerRemain();        
+    },[saveStat,taskTime,timerCondition,updateTimerRemain]);
+
+    const timerTik = useCallback( ()=>{
         let now = new Date();
         timerRemainMs = timerEnd.getTime() - now.getTime();
         if (timerRemainMs <= timerUpdateIntervalMs) {
             stopTimer();
             if (timerCondition === 'Running'){
-                let breakTime = (completedPomodoros % breaksForLongBreak === 0 && completedPomodoros > 0 ? longBreakTime: shortbreakTime)*60 
+                let breakTime = (completedPomodoros % breaksForLongBreak === 0 && completedPomodoros > 0 ? longBreakTime: shortbreakTime)*60; 
                 completePomodoro();
                 if (currentTask.pomodoros <= completedPomodoros && taskIndex === appState.taskList.length - 1){
                     moveTimerCondition('Waiting');
@@ -192,7 +252,15 @@ export function Timer({taskIndex}:ITimer){
             }
         }
         updateTimerRemain();
-    }
+    },[appState.taskList.length,breaksForLongBreak,completePomodoro,longBreakTime,shortbreakTime,startTimer,stopTimer,taskIndex,timerCondition,timerUpdateIntervalMs,updateTimerRemain]);
+
+    const addTime = ()=>{
+        timerRemainMs = timerRemainMs + addButtonTime * 60 * 1000;
+        if (timerEnd){
+            timerEnd = addMinutes(timerEnd,addButtonTime);
+        }
+        updateTimerRemain();
+    }    
 
     useEffect(
         ()=>{
@@ -203,7 +271,7 @@ export function Timer({taskIndex}:ITimer){
                 timerInterval = setTimeout(()=>{setTik(!tik)},timerUpdateIntervalMs);
             }
         },
-        [tik,timerCondition]
+        [tik,timerCondition,timerUpdateIntervalMs,timerTik]
     );
 
     useEffect(
@@ -211,24 +279,6 @@ export function Timer({taskIndex}:ITimer){
             currentTask = ~taskIndex ? appState.taskList[taskIndex] : emptyTask;
         },
         [appState,taskIndex]
-    );
-
-    useEffect(
-        ()=>{
-            const addTime = ()=>{
-                timerRemainMs = timerRemainMs + addButtonTime * 60 * 1000;
-                if (timerEnd){
-                    timerEnd = addMinutes(timerEnd,addButtonTime);
-                }
-                updateTimerRemain();
-            }
-            document.getElementById('addButton')?.addEventListener('click',addTime);
-
-            return ()=>{
-                document.getElementById('addButton')?.removeEventListener('click',addTime);
-            }
-
-        }
     );
 
     return (
@@ -242,7 +292,7 @@ export function Timer({taskIndex}:ITimer){
                     {`${currentTask.name}`}
                 </span>
                 <span>
-                    Помидор {currentTask.completedPomodoros + (timerCondition === 'Break' || timerCondition === 'BreakPaused' ? 0 : 1)}
+                    Помидор {(currentTask.completedPomodoros + (timerCondition === 'Break' || timerCondition === 'BreakPaused' ? 0 : 1))||1}
                 </span>
             </div>
             <div className={styles.clock}>
@@ -252,7 +302,8 @@ export function Timer({taskIndex}:ITimer){
                     timerCondition === 'Break' ? styles.break : ''
                 ])}>
                     {addLeadingZero(minutes)}:{addLeadingZero(seconds)}
-                    <button 
+                    <button
+                        onClick={addTime} 
                         className={styles.addButton} 
                         disabled={!~taskIndex}
                         id='addButton'

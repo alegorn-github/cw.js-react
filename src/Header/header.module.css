@@ -16,6 +16,11 @@
 
 .logo, .logo:visited {
     color: var(--red);
+    transition: color var(--state-delay);
+}
+
+.logo:hover {
+    color: var(--red-dark);
 }
 
 .logo > svg {
@@ -27,6 +32,8 @@
     align-items: flex-end;
     font-size: 16px;
     font-family: SFL,sans-serif;
+    fill: var(--red);
+    transition: color var(--state-delay), fill var(--state-delay);
 }
 
 .dashboardLink > svg {
@@ -35,4 +42,9 @@
 
 .dashboardLink, .dashboardLink:visited {
     color: var(--red);
+}
+
+.dashboardLink:hover {
+    fill: var(--red-dark);
+    color: var(--red-dark);
 }

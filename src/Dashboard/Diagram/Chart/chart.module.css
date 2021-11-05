@@ -1,0 +1,66 @@
+.chart {
+    position: relative;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-evenly;
+}
+
+.line {
+    position: relative;
+    flex: 0 0 1px;
+    background-color: var(--gray-dark-33);
+    opacity: 0.2;    
+}
+
+.mark {
+    position: absolute;
+    /* top: 50%; */
+    top: -50%;
+    right: 0;
+    width: 102px;
+    padding-left: 32px;
+    padding-right: 20px;
+    background-color: var(--gray-lightest-F4);
+    font-size: 12px;
+    line-height: 33px;
+    transform: translateY(-50%);
+}
+
+.columnContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    /* flex-direction: row-reverse; */
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0 56px;
+
+}
+
+.column {
+    max-width: 77px;
+    min-width: 55px;
+    height: 100%;
+    background-color: var(--red-light);
+    text-align: center;
+    cursor: pointer;
+    transition: bacground-color var(--state-delay);
+}
+
+.column:not(:last-child){
+    margin-right: 32px;
+}
+
+.column.nodata{
+    height: 5px;
+    background-color: var(--gray-light-C4);
+}
+
+.column.selected,.column:hover {
+    background-color: var(--red);
+}

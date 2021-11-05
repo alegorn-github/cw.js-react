@@ -1,0 +1,20 @@
+.diagram {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.main {
+    flex: 1 1 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chartArea {
+    flex: 1 1 100%;
+}
+
+.yAxis {
+    flex: 1 0 109px;
+}

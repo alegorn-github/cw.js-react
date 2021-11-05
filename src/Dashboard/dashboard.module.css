@@ -1,0 +1,54 @@
+.dashboard {
+    color: var(--gray-dark-33);
+}
+
+.card {
+    background-color: var(--gray-lightest-F4);
+}
+
+.topContainer {
+    display: flex;
+    justify-content: space-between;
+    /* height: 471px; */
+    margin-bottom: 32px;
+}
+
+.bottomContainer {
+    display: flex;
+    /* height: 179px; */
+    justify-content: space-between;
+    margin-bottom: 99px;
+}
+
+.bottomContainer > .card {
+    flex: 1 1 33%;
+}
+
+.bottomContainer > .card:not(:last-child) {
+    margin-right: 32px;
+}
+
+.mainStatContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 0 1 296px;
+    margin-right: 32px;
+}
+
+.mainStatContainer > .card {
+    flex: 1 1 50%;
+}
+
+.mainStatContainer > .card:last-child {
+    flex:0 1 179px;
+}
+
+.mainStatContainer > .card:not(:last-child){
+    margin-bottom: 32px;
+}
+
+.diagram {
+    flex: 1 1 calc(100% - 296px);
+    background-color: var(--gray-lightest-F4);
+}

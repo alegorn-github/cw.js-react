@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { AppContext, TAppData } from "../../App";
+import { AppContext } from "../../App";
 import styles from './taskform.module.css';
 
 export function TaskForm(){
@@ -23,9 +23,13 @@ export function TaskForm(){
         };
 
         console.log('newTask',newTask);
-        setAppState((prevState:TAppData) => {
-            return ({...prevState,'taskList':myTaskList.concat(newTask)})
-        }); 
+
+        setAppState({taskList:myTaskList.concat(newTask)});
+
+        
+        // setAppState((prevState:TAppData) => {
+        //     return ({...prevState,'taskList':myTaskList.concat(newTask)})
+        // }); 
 
         setTaskName('');
     }

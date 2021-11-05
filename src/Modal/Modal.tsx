@@ -3,12 +3,11 @@ import { getClassName } from '../tools/getClassName';
 import './modal.css';
 
 interface IModal {
-    children: React.ReactNode;
     isVisible ?: boolean;
     onClose?: ()=>void;
 }
 
-export function Modal({children,isVisible=false,onClose}:IModal){
+export const Modal:React.FC<IModal> =  ({children,isVisible=false,onClose}) => {
 
     const modalNode = document.getElementById('modal')||document.createElement('div');
 

@@ -2,6 +2,8 @@ import styles from './tasklist.module.css';
 import {Task} from './Task/Task';
 import { useContext } from 'react';
 import { AppContext, TTaskList } from '../../App';
+import {getRandomKey} from '../../tools/getRandomKey';
+import {getTimePhrase} from '../../tools/getTimePhrase';
 
 export function TaskList(){
 
@@ -12,16 +14,14 @@ export function TaskList(){
 
     function getTotal(tasks:TTaskList):string{
         const total = tasks.reduce((totalTime,task)=> task.pomodoros*pomodoroTime + totalTime,0);
-        const hours = Math.trunc(total / 60);
-        const minutes = Math.trunc(total % 60);
-        return `${hours > 0? hours + ' час ': ''}${minutes} мин`;
+        return getTimePhrase(total);
     }
     
     return (
         <div>
             <ul className={styles.taskList}>
                 { taskList.map((task, index)=>(
-                    <Task key={Math.random().toString(36).substring(2,15)} id={task.id} name={task.name} pomodoros={task.pomodoros} index={index}/>
+                    <Task key={getRandomKey()} id={task.id} name={task.name} pomodoros={task.pomodoros} index={index}/>
                 ))}
             </ul>
             <div className={styles.totalTime}>{

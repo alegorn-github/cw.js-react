@@ -1,0 +1,25 @@
+.xAxis {
+    display: flex;
+    justify-content: flex-start;
+    padding: 11px 56px;
+    background-color: var(--gray-lightest-EC);
+    font-size: 24px;
+    line-height: 29px;    
+    color: var(--gray-99);
+    text-align: center;
+    transition: color var(--state-delay);
+}
+
+.day {
+    max-width: 77px;
+    min-width: 55px;
+    cursor: pointer;
+}
+
+.day:not(:last-child){
+    margin-right: 32px;
+}
+
+.day.selected,.day:hover {
+    color: var(--red);
+}

@@ -1,0 +1,46 @@
+.pomodoros {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+}
+
+.image {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0;
+}
+
+.sign {
+    padding: 9px 0;
+    background-color: var(--red);
+    text-align: center;
+    font-family: 'SFB';
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    color: var(--white);
+}
+
+.sign.invisible {
+    display: none;
+}
+
+.imageAndCount{
+    display: flex;
+    align-items: center;
+    font-family: 'SFB';
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    color: var(--gray-99);
+    
+}
+
+.imageAndCount > svg {
+    margin-right: 15px;
+}

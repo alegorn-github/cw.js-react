@@ -1,5 +1,5 @@
 import styles from './task.module.css';
-import { Dropdown } from './Dropdown';
+import { Dropdown } from '../../../Dropdown';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext, TTask, TTaskList} from '../../../App';
 import { getClassName } from '../../../tools/getClassName';
@@ -8,7 +8,8 @@ import { Modal } from '../../../Modal/Modal';
 let isTaskCompleted = false;
 
 export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completedPomodoros">){
-    const [{taskList,settings},setAppState] = useContext(AppContext);
+    const [appState,setAppState] = useContext(AppContext);
+    const {taskList,settings} = appState;
     const {maxPomodorosPerTask} = settings;
     const myTaskList = [...taskList];
     const [taskName,setTaskName] = useState(name);
@@ -25,7 +26,9 @@ export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completed
     }
 
     function saveState(newTaskList:TTaskList=myTaskList){
-        setAppState((prevState)=>({...prevState,taskList:[...newTaskList]}));
+        setAppState({taskList:[...newTaskList]});
+
+        // setAppState((prevState)=>({...prevState,taskList:[...newTaskList]}));
     }
 
     function addPomodoro(){
