@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { LegacyRef, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AppContext, TTask, weekTemplate} from '../../App';
 import { getClassName} from '../../tools/getClassName';
 import {getMonday} from '../../tools/getMonday';
@@ -49,13 +49,16 @@ export function Timer({taskIndex}:ITimer){
     const [tik,setTik] = useState(false);
     const [minutes,setMinutes] = useState<number>(getMinutesAndSeconds(taskTime*60000)[0]);
     const [seconds,setSeconds] = useState<number>(getMinutesAndSeconds(taskTime*60000)[1]);
+    const [[firstMinuteDigit,secondMinuteDigit,firstSecondDigit,secondSecondDigit],setTimerDigits] = useState([0,0,0,0]);
     const [timerCondition,setTimerCondition] = useState<TTimerCondition>('Waiting');
+    const firstMinuteDigitRef = useRef<HTMLSpanElement>(null);
+    const secondMinuteDigitRef = useRef<HTMLSpanElement>(null);
+    const firstSecondDigitRef = useRef<HTMLSpanElement>(null);
+    const secondSecondDigitRef = useRef<HTMLSpanElement>(null);
 
-    // const monday = getMonday(new Date());
     const savedWeekStat = appState.statistic.find((stat)=>stat.monday===monday)?.stat||weekTemplate;
     dayStat = savedWeekStat[weekDay];
 
-    // dayStat = {...dayTemplate};
     timerRemainMs = timerRemainMs || taskTime*60*1000;
     currentTask = ~taskIndex ? appState.taskList[taskIndex] : emptyTask;
     
@@ -221,6 +224,44 @@ export function Timer({taskIndex}:ITimer){
         setSeconds(seconds);
     },[]);
 
+    useEffect(
+        ()=>{
+            const newDigits = [Math.trunc(minutes/10),minutes % 10,Math.trunc(seconds/10),seconds % 10];
+            const digits = [firstMinuteDigit,secondMinuteDigit,firstSecondDigit,secondSecondDigit];
+            const refs = [firstMinuteDigitRef,secondMinuteDigitRef,firstSecondDigitRef,secondSecondDigitRef];
+
+            const fadeOut = (event:AnimationEvent)=>{
+                if (event.currentTarget instanceof HTMLElement){
+                    event.currentTarget?.classList.remove(styles.fadeOut);
+                }
+                setTimerDigits([newDigits[0],newDigits[1],newDigits[2],newDigits[3]]);
+            }
+            newDigits.forEach((elem,index)=>{
+                if (refs[index] instanceof HTMLElement ){
+                    refs[index].current?.classList.add(styles.fadeOut);
+                    refs[index].current?.addEventListener('animationend',fadeOut);
+                }
+            });
+
+            // setTimerDigits((prevState)=>{
+            //     if (secondSecondDigitRef.current instanceof HTMLElement){
+            //         secondSecondDigitRef.current.classList.add(styles.fadeOut);
+            //         secondSecondDigitRef.current.addEventListener('animationend',fadeOut);
+            //     }
+            //     return [newDigits[0],newDigits[1],newDigits[2],newDigits[3]];
+            // });
+            return ()=>{
+                newDigits.forEach((elem,index)=>{
+                    if (refs[index] instanceof HTMLElement ){
+                        refs[index].current?.removeEventListener('animationend',fadeOut);
+                    }
+                });
+                }
+        },
+        [minutes,seconds]
+    );
+
+
     const stopTimer = useCallback(()=>{
         clearInterval(timerInterval);
         if (timerCondition === 'Running'){
@@ -255,11 +296,13 @@ export function Timer({taskIndex}:ITimer){
     },[appState.taskList.length,breaksForLongBreak,completePomodoro,longBreakTime,shortbreakTime,startTimer,stopTimer,taskIndex,timerCondition,timerUpdateIntervalMs,updateTimerRemain]);
 
     const addTime = ()=>{
-        timerRemainMs = timerRemainMs + addButtonTime * 60 * 1000;
-        if (timerEnd){
-            timerEnd = addMinutes(timerEnd,addButtonTime);
+        if (timerRemainMs/60000 + addButtonTime  < 100 ){
+            timerRemainMs = timerRemainMs + addButtonTime * 60000;
+            if (timerEnd){
+                timerEnd = addMinutes(timerEnd,addButtonTime);
+            }
+            updateTimerRemain();
         }
-        updateTimerRemain();
     }    
 
     useEffect(
@@ -273,6 +316,10 @@ export function Timer({taskIndex}:ITimer){
         },
         [tik,timerCondition,timerUpdateIntervalMs,timerTik]
     );
+
+    useEffect(
+        ()=>{}
+    )
 
     useEffect(
         ()=>{
@@ -301,11 +348,16 @@ export function Timer({taskIndex}:ITimer){
                     timerCondition === 'Running' ? styles.running : '',
                     timerCondition === 'Break' ? styles.break : ''
                 ])}>
-                    {addLeadingZero(minutes)}:{addLeadingZero(seconds)}
+                    {/* {addLeadingZero(minutes)}:{addLeadingZero(seconds)} */}
+                    <span ref={firstMinuteDigitRef}>{firstMinuteDigit}</span>
+                    <span ref={secondMinuteDigitRef}>{secondMinuteDigit}</span>
+                    :
+                    <span ref={firstSecondDigitRef}>{firstSecondDigit}</span>
+                    <span ref={secondSecondDigitRef}>{secondSecondDigit}</span>
                     <button
                         onClick={addTime} 
                         className={styles.addButton} 
-                        disabled={!~taskIndex}
+                        disabled={!~taskIndex || timerRemainMs/60000 + addButtonTime  > 100}
                         id='addButton'
                     >
                     <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
