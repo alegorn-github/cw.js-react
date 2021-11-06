@@ -55,12 +55,14 @@ export const AppContext = createContext<TAppContext>([{taskList:[],statistic:[],
 
 function App() {
 
+  let initialAppData:TAppData = {taskList:[],statistic:[],settings};
+
   const storageAppData = localStorage.getItem('appData')||'';
-  const savedAppData:TAppData = JSON.parse(storageAppData||'{taskList:[],statistic:[],settings}');
+  if (storageAppData){
+    initialAppData = JSON.parse(storageAppData);
+  }
 
-  console.log('App:savedAppData',savedAppData);
-
-  const [appData,setAppData] = useState<TAppData>(savedAppData);
+  const [appData,setAppData] = useState<TAppData>(initialAppData);
 
   function saveAppData(newAppData:Partial<TAppData>){
 
