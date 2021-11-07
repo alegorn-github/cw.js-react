@@ -164,9 +164,9 @@ export function Timer({taskIndex}:ITimer){
         saveStat();
     },[appState.taskList,saveStat,setAppState,taskIndex]);
 
-    function moveTimerCondition(newCondition:TTimerCondition){
+    const moveTimerCondition = useCallback((newCondition:TTimerCondition)=>{
         setTimerCondition(newCondition);
-    }
+    },[]);
 
     function addMinutes(date:Date,minutes:number){
         const newDate = new Date();
@@ -271,6 +271,16 @@ export function Timer({taskIndex}:ITimer){
         updateTimerRemain();        
     },[saveStat,taskTime,timerCondition,updateTimerRemain]);
 
+
+    useEffect(
+        ()=>{
+            clearInterval(timerInterval);
+            moveTimerCondition('Waiting');
+            timerRemainMs = taskTime*60*1000;
+            updateTimerRemain();
+        },[moveTimerCondition,updateTimerRemain]
+    );
+
     const timerTik = useCallback( ()=>{
         let now = new Date();
         timerRemainMs = timerEnd.getTime() - now.getTime();
@@ -292,7 +302,7 @@ export function Timer({taskIndex}:ITimer){
             }
         }
         updateTimerRemain();
-    },[appState.taskList.length,breaksForLongBreak,completePomodoro,longBreakTime,shortbreakTime,startTimer,stopTimer,taskIndex,timerCondition,timerUpdateIntervalMs,updateTimerRemain]);
+    },[appState.taskList.length,breaksForLongBreak,completePomodoro,longBreakTime,shortbreakTime,startTimer,stopTimer,taskIndex,timerCondition,timerUpdateIntervalMs,updateTimerRemain,moveTimerCondition]);
 
     const addTime = ()=>{
         if (timerRemainMs/60000 + addButtonTime  < 100 ){

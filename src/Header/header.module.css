@@ -34,7 +34,7 @@
 
 .dashboardLink {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     font-size: 16px;
     font-family: SFL,sans-serif;
     fill: var(--red);

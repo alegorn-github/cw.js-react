@@ -44,9 +44,9 @@
   }
   
 :root {
-    --white: #ffffff;
-    --black: #000000;
-    --gray-dark-33: #333333;
+    /* --white: #ffffff;
+    --black: #000000; */
+    /* --gray-dark-33: #333333;
     --gray-99: #999999;
     --gray-light-C4: #C4C4C4;
     --gray-lightest-E4: #E4E4E4;
@@ -58,13 +58,13 @@
     --red-light: #EA8979;
     --green: #A8B64F;
     --green-dark: #899441;
-    --state-delay: 300;
     --orange: #FFDDA9;
     --orange-dark: #FFAE35;
     --purple: #DFDCFE;
     --purple-dark: #9C97D7;
     --blue: #C5F1FF;
-    --blue-dark: #7FC2D7;
+    --blue-dark: #7FC2D7; */
+    --state-delay: 300;
 }
 
 .container {
@@ -77,6 +77,8 @@ body {
     font-family: SFR,sans-serif;
     font-size: 16px;
     line-height: 17px;
+    background-color: var(--white);
+    color: var(--black);
 }
 
 .link {

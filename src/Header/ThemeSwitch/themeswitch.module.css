@@ -1,6 +1,23 @@
 .themeSwitch{
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
     border: none;
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    fill: var(--red);
+    color: var(--red);
+    transition: fill var(--state-delay), color var(--state-delay);
+}
+
+.themeSwitch > span {
+    display: inline-block;
+    font-size: 16px;
+    font-family: SFL,sans-serif;
+}
+
+.themeSwitch:hover,.themeSwitch:active{
+    fill: var(--red-dark);
+    color: var(--red-dark);
 }

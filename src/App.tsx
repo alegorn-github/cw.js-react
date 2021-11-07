@@ -1,10 +1,11 @@
 import 'normalize.css';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Header} from './Header';
 import { Workspace } from './Workspace/Workspace';
 import { Dashboard } from './Dashboard';
+import {changeTheme} from './tools/changeTheme';
 
 export type TDayStatistic = {
   pomodoros: number;
@@ -73,6 +74,13 @@ function App() {
       return {...prevState, ...newAppData}
     });
   }
+
+  useEffect(
+    ()=>{
+      changeTheme(appData.darkTheme);
+    },
+    [appData.darkTheme]
+  );
 
   return (
     <Router>

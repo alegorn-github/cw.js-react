@@ -22,9 +22,6 @@
 
 .button {
     position: relative;
-    /* display: flex;
-    align-items: center;
-    justify-content: space-between; */
     width: 100%;
     padding: 19px 15px;
     background-color: var(--gray-lightest-F4);
@@ -32,6 +29,7 @@
     text-align: left;
     outline: none;
     cursor: pointer;
+    color: var(--black);
 }
 
 .button > svg {
@@ -62,6 +60,7 @@
     justify-content: flex-start;
     filter: drop-shadow(0px 10px 63px rgba(0, 0, 0, 0.07));
     z-index: 1;
+    color: var(--black);
 }
 
 .menuButton {
@@ -71,6 +70,7 @@
     text-align: left;
     outline: none;
     cursor: pointer;
+    color: var(--black);
 }
 
 .menuButton:hover {
