@@ -58,7 +58,7 @@ export function Timer({taskIndex}:ITimer){
     const firstSecondDigitRef = useRef<HTMLSpanElement>(null);
     const secondSecondDigitRef = useRef<HTMLSpanElement>(null);
 
-    const savedWeekStat = appState.statistic.find((stat)=>stat.monday===monday)?.stat||weekTemplate;
+    const savedWeekStat = appState.statistic.find((stat)=>stat.monday===monday)?.stat||weekTemplate();
     dayStat = savedWeekStat[weekDay];
 
     timerRemainMs = timerRemainMs || taskTime*60*1000;
@@ -141,7 +141,7 @@ export function Timer({taskIndex}:ITimer){
     const saveStat = useCallback(() => {
         const newStatistic = [...appState.statistic];
         if (newStatistic[newStatistic.length - 1]?.monday !== monday){
-            let newWeekStatistic = weekTemplate;
+            let newWeekStatistic = weekTemplate();
             newWeekStatistic[weekDay] = dayStat;
             newStatistic.push({monday:monday,stat:newWeekStatistic});
         }

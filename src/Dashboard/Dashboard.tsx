@@ -26,16 +26,16 @@ export const shortWeekDays = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 const yMarks = ['1ч 40мин','1ч 15мин','50мин','25мин'];
 
 const timeMultiplier = 60; // Each second is minute. For debugging only. Set it to 1 before deploy!
-
+const todayDay = (new Date()).getDay();
 
 export function Dashboard(){
 
-    const [dashboardData,setDashboardData] = useState<TDashboardData>({selectedDay:0,selectedWeek:getMonday(new Date())});
+    const [dashboardData,setDashboardData] = useState<TDashboardData>({selectedDay:todayDay - (todayDay === 0 ? -6 : 1) ,selectedWeek:getMonday(new Date())});
 
     const {selectedDay,selectedWeek} = dashboardData;
     const [{statistic},] = useContext(AppContext);
 
-    const week = statistic.find((week)=>week.monday===selectedWeek)||{monday:0,stat:weekTemplate};
+    const week = statistic.find((week)=>week.monday===selectedWeek)||{monday:0,stat:weekTemplate()};
 
     const weekStat = [...week.stat].map((dayStat)=>({ 
         ...dayStat,

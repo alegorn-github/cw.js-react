@@ -50,7 +50,7 @@ const settings:TSettings = {
 }
 
 export const dayTemplate:TDayStatistic = {breaks:0,pausedS:0,pomodoroTimeS:0,pomodoros:0,workS:0};
-export const weekTemplate:TWeekStatistic = (new Array(7)).fill(dayTemplate);
+export const weekTemplate:()=>TWeekStatistic = ()=>((new Array<TDayStatistic>(7)).fill({...dayTemplate}));
 
 export const AppContext = createContext<TAppContext>([{taskList:[],statistic:[],settings},(p)=>p]);
 
