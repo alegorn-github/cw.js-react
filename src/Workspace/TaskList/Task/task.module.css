@@ -103,11 +103,6 @@
     display: none;
 }
 
-.taskName.taskCompleted {
-    color: var(--gray-light-C4);
-    text-decoration: line-through;
-}
-
 .taskInput {
     display: none;
     padding: 5px;
@@ -118,4 +113,35 @@
 
 .taskInput.taskIsEdited {
     display: inline-block;
+}
+
+@keyframes digitFadeOut {
+    from {
+        transform: rotateX(0);
+    }
+    to {
+        transform: rotateX(90deg);
+    } 
+}
+
+@keyframes digitFadeIn {
+    from {
+        transform: rotateX(90deg);
+    }
+    to {
+        transform: rotateX(0);
+    } 
+}
+
+
+.fadeOut {
+    animation: digitFadeOut 500ms linear;
+}
+
+.fadeIn {
+    animation: digitFadeIn 500ms linear;
+}
+
+.hidden {
+    display: none;
 }

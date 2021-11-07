@@ -1,35 +1,31 @@
 import styles from './task.module.css';
 import { Dropdown } from '../../../Dropdown';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppContext, TTask, TTaskList} from '../../../App';
 import { getClassName } from '../../../tools/getClassName';
 import { Modal } from '../../../Modal/Modal';
 
-let isTaskCompleted = false;
-
-export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completedPomodoros">){
+export function Task({id,name,pomodoros,index:taskIndex=0,created,deleted}:Omit<TTask,"completedPomodoros">){
     const [appState,setAppState] = useContext(AppContext);
     const {taskList,settings} = appState;
     const {maxPomodorosPerTask} = settings;
-    const myTaskList = [...taskList];
+    const myTaskList = useMemo(()=>[...taskList],[taskList]);
     const [taskName,setTaskName] = useState(name);
     const [addButtonEnabled, setAddButtonEnabled] = useState(pomodoros < maxPomodorosPerTask);
     const [extractButtonEnabled, setExtractButtonEnabled] = useState(pomodoros > 1);
     const [isTaskEdited, setIsTaskEdited] = useState(false);
     const [isShowModal,setIsShowModal] = useState(false);
     const taskNameRef = useRef<HTMLInputElement>(null);
-    isTaskCompleted = taskList[taskIndex].pomodoros === taskList[taskIndex].completedPomodoros;
+    const taskRef = useRef<HTMLLIElement>(null);
 
     function enableButtons(pomodoros:number){
         setAddButtonEnabled(pomodoros < maxPomodorosPerTask);
         setExtractButtonEnabled(pomodoros > 1);
     }
 
-    function saveState(newTaskList:TTaskList=myTaskList){
+    const saveState = useCallback((newTaskList:TTaskList=myTaskList)=>{
         setAppState({taskList:[...newTaskList]});
-
-        // setAppState((prevState)=>({...prevState,taskList:[...newTaskList]}));
-    }
+    },[myTaskList,setAppState]);
 
     function addPomodoro(){
         myTaskList[taskIndex].pomodoros = myTaskList[taskIndex].pomodoros + 1;
@@ -48,7 +44,8 @@ export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completed
     }
 
     function deleteTask(){
-       saveState(myTaskList.filter((elem,index)=> index !== taskIndex ));
+        myTaskList[taskIndex].deleted = true;
+        saveState();
     }
 
     function onTaskNameChage(event:React.FormEvent<HTMLInputElement>){
@@ -57,7 +54,7 @@ export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completed
 
     useEffect(
         ()=>{
-            if (taskNameRef.current && isTaskEdited){
+            if (taskNameRef.current instanceof HTMLInputElement && isTaskEdited){
                 const taskNameElement = taskNameRef.current;
 
                 const stopTaskEdit = ()=>{setIsTaskEdited(false)};
@@ -82,24 +79,71 @@ export function Task({id,name,pomodoros,index:taskIndex=0}:Omit<TTask,"completed
 
             }
         },
+        [taskNameRef,isTaskEdited,myTaskList,saveState,taskIndex,taskName]
         
     );
 
-    useEffect(
+    useEffect (
         ()=>{
-            isTaskCompleted = taskList[taskIndex].pomodoros === taskList[taskIndex].completedPomodoros;
-        },
-        [taskList,taskIndex]
+            const hookTaskRef = taskRef.current;
+
+            const fadeInEnd = ()=>{
+                if (hookTaskRef instanceof HTMLLIElement){
+                    hookTaskRef?.classList.remove(styles.fadeIn);
+                    saveState(myTaskList.map((elem,index)=> {
+                        if (index === taskIndex){
+                            elem.created = false;
+                        }
+                        return elem;
+                    }))
+                }
+            }
+
+            const fadeOutEnd = ()=>{
+                if (hookTaskRef instanceof HTMLLIElement){
+                    hookTaskRef?.classList.remove(styles.fadeOut);
+                    saveState(myTaskList.filter((elem,index)=> index !== taskIndex ))
+                }
+
+            }
+
+            if (created){
+                if (hookTaskRef instanceof HTMLLIElement){
+                    hookTaskRef.classList.remove(styles.hidden);
+                    hookTaskRef.classList.add(styles.fadeIn);
+                    hookTaskRef.addEventListener('animationend',fadeInEnd,{once:true})
+                }
+            }
+
+            if (deleted){
+                if (hookTaskRef instanceof HTMLLIElement){
+                    hookTaskRef.classList.add(styles.fadeOut);
+                    hookTaskRef.addEventListener('animationend',fadeOutEnd,{once:true})
+                }
+            }
+
+
+            return ()=>{
+                if (hookTaskRef instanceof HTMLLIElement){
+                    hookTaskRef.removeEventListener('animationend',fadeInEnd)
+                    hookTaskRef.removeEventListener('animationend',fadeOutEnd)
+                    hookTaskRef.classList.remove(styles.fadeIn);
+                    hookTaskRef.classList.remove(styles.fadeOut);
+                }
+
+            }
+
+        },[created,deleted,myTaskList,saveState,taskIndex]
+
     );
 
     return (
-        <li className={styles.task} >
+        <li className={`${styles.task} ${created && styles.hidden}`} ref={taskRef} >
             <div>
                 <div className={styles.pomodoroCounter} >{pomodoros}</div>
                 <span className={getClassName([
                     styles.taskName,
                     isTaskEdited?styles.taskIsEdited:'',
-                    isTaskCompleted?styles.taskCompleted:'',
                 ])} >{taskName}</span>
                 <input ref={taskNameRef} type='text' className={getClassName([styles.taskInput,isTaskEdited?styles.taskIsEdited:''])} value={taskName} onChange={onTaskNameChage}/>
             </div>

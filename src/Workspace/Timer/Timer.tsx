@@ -1,4 +1,4 @@
-import { LegacyRef, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AppContext, TTask, weekTemplate} from '../../App';
 import { getClassName} from '../../tools/getClassName';
 import {getMonday} from '../../tools/getMonday';
@@ -29,7 +29,9 @@ const emptyTask:TTask = {
     name:'Задач пока нет',
     pomodoros: 1,
     id: '0',
-    completedPomodoros: 0
+    completedPomodoros: 0,
+    created: true,
+    deleted: false,
 };
 let currentTask = emptyTask;
 let completedPomodoros = 0;
@@ -154,9 +156,7 @@ export function Timer({taskIndex}:ITimer){
     const completePomodoro = useCallback((pomodoros:number = 1)=>{
         let taskList = [...appState.taskList];
         taskList[taskIndex].completedPomodoros = taskList[taskIndex].completedPomodoros + pomodoros;
-        if (taskList[taskIndex].completedPomodoros === taskList[taskIndex].pomodoros) {
-            taskList = taskList.filter((task,index)=> index !== taskIndex );
-        }
+        taskList[taskIndex].deleted = taskList[taskIndex].completedPomodoros === taskList[taskIndex].pomodoros
         setAppState({taskList:[...taskList]});
         completedPomodoros++;
         calcPomodoroStat(pomodoros);
@@ -166,10 +166,6 @@ export function Timer({taskIndex}:ITimer){
 
     function moveTimerCondition(newCondition:TTimerCondition){
         setTimerCondition(newCondition);
-    }
-
-    function addLeadingZero(number:number):string{
-        return (number > 9 ? '' : '0') + number;
     }
 
     function addMinutes(date:Date,minutes:number){
@@ -227,36 +223,39 @@ export function Timer({taskIndex}:ITimer){
     useEffect(
         ()=>{
             const newDigits = [Math.trunc(minutes/10),minutes % 10,Math.trunc(seconds/10),seconds % 10];
-            const digits = [firstMinuteDigit,secondMinuteDigit,firstSecondDigit,secondSecondDigit];
             const refs = [firstMinuteDigitRef,secondMinuteDigitRef,firstSecondDigitRef,secondSecondDigitRef];
+
+            const fadeIn = (event:AnimationEvent)=>{
+                if (event.currentTarget instanceof HTMLElement){
+                    event.currentTarget?.classList.remove(styles.fadeIn);
+                }
+            };
 
             const fadeOut = (event:AnimationEvent)=>{
                 if (event.currentTarget instanceof HTMLElement){
                     event.currentTarget?.classList.remove(styles.fadeOut);
+
+                    setTimerDigits([newDigits[0],newDigits[1],newDigits[2],newDigits[3]]);
+
+                    event.currentTarget?.classList.add(styles.fadeIn);
+                    event.currentTarget?.addEventListener('animationend',fadeIn,{once:true});
                 }
-                setTimerDigits([newDigits[0],newDigits[1],newDigits[2],newDigits[3]]);
             }
             newDigits.forEach((elem,index)=>{
-                if (refs[index] instanceof HTMLElement ){
+                if (refs[index].current instanceof HTMLSpanElement){
+                    if (elem.toString() !== refs[index].current?.innerText)
                     refs[index].current?.classList.add(styles.fadeOut);
-                    refs[index].current?.addEventListener('animationend',fadeOut);
+                    refs[index].current?.addEventListener('animationend',fadeOut,{once:true});
                 }
             });
 
-            // setTimerDigits((prevState)=>{
-            //     if (secondSecondDigitRef.current instanceof HTMLElement){
-            //         secondSecondDigitRef.current.classList.add(styles.fadeOut);
-            //         secondSecondDigitRef.current.addEventListener('animationend',fadeOut);
-            //     }
-            //     return [newDigits[0],newDigits[1],newDigits[2],newDigits[3]];
-            // });
             return ()=>{
                 newDigits.forEach((elem,index)=>{
-                    if (refs[index] instanceof HTMLElement ){
-                        refs[index].current?.removeEventListener('animationend',fadeOut);
-                    }
+                    refs[index].current?.classList.remove(styles.fadeIn,styles.fadeOut);
+                    refs[index].current?.removeEventListener('animationend',fadeOut);
+                    refs[index].current?.removeEventListener('animationend',fadeIn);
                 });
-                }
+            }
         },
         [minutes,seconds]
     );
@@ -316,10 +315,6 @@ export function Timer({taskIndex}:ITimer){
         },
         [tik,timerCondition,timerUpdateIntervalMs,timerTik]
     );
-
-    useEffect(
-        ()=>{}
-    )
 
     useEffect(
         ()=>{

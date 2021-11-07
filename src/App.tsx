@@ -32,6 +32,8 @@ export type TTask = {
   name:string;
   pomodoros:number;
   completedPomodoros: number;
+  created: boolean;
+  deleted: boolean;
 }
 export type TTaskList = Array<TTask>;
 export type TAppData = {taskList:TTaskList,statistic:TStatistic,settings:TSettings};

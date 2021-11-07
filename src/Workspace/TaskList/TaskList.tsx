@@ -14,14 +14,14 @@ export function TaskList(){
 
     function getTotal(tasks:TTaskList):string{
         const total = tasks.reduce((totalTime,task)=> task.pomodoros*pomodoroTime + totalTime,0);
-        return getTimePhrase(total);
+        return getTimePhrase(total*60);
     }
-    
+
     return (
         <div>
             <ul className={styles.taskList}>
                 { taskList.map((task, index)=>(
-                    <Task key={getRandomKey()} id={task.id} name={task.name} pomodoros={task.pomodoros} index={index}/>
+                    <Task key={getRandomKey()} id={task.id} name={task.name} pomodoros={task.pomodoros} index={index} created={task.created||false} deleted={task.deleted||false}/>
                 ))}
             </ul>
             <div className={styles.totalTime}>{

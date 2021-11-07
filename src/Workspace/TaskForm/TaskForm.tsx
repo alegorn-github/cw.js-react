@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { AppContext } from "../../App";
+import { AppContext, TTask } from "../../App";
 import styles from './taskform.module.css';
 
 export function TaskForm(){
@@ -15,22 +15,16 @@ export function TaskForm(){
         event.preventDefault();
         const {taskList} = appState;
         const myTaskList = [...taskList];
-        const newTask = {
+        const newTask:TTask = {
             id:Math.random().toString(36).substring(2,15),
             name:taskName,
             pomodoros:1,
-            completedPomodoros:0
+            completedPomodoros:0,
+            created:true,
+            deleted:false,
         };
 
-        console.log('newTask',newTask);
-
         setAppState({taskList:myTaskList.concat(newTask)});
-
-        
-        // setAppState((prevState:TAppData) => {
-        //     return ({...prevState,'taskList':myTaskList.concat(newTask)})
-        // }); 
-
         setTaskName('');
     }
 
