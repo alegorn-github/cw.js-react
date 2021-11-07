@@ -36,7 +36,7 @@ export type TTask = {
   deleted: boolean;
 }
 export type TTaskList = Array<TTask>;
-export type TAppData = {taskList:TTaskList,statistic:TStatistic,settings:TSettings};
+export type TAppData = {taskList:TTaskList,statistic:TStatistic,settings:TSettings,darkTheme: boolean};
 export type TAppContext = [TAppData,(p:Partial<TAppData>)=>void]
 
 const settings:TSettings = {
@@ -52,12 +52,12 @@ const settings:TSettings = {
 export const dayTemplate:TDayStatistic = {breaks:0,pausedS:0,pomodoroTimeS:0,pomodoros:0,workS:0};
 export const weekTemplate:()=>TWeekStatistic = ()=>((new Array<TDayStatistic>(7)).fill({...dayTemplate}));
 
-export const AppContext = createContext<TAppContext>([{taskList:[],statistic:[],settings},(p)=>p]);
+export const AppContext = createContext<TAppContext>([{taskList:[],statistic:[],settings,darkTheme:false},(p)=>p]);
 
 
 function App() {
 
-  let initialAppData:TAppData = {taskList:[],statistic:[],settings};
+  let initialAppData:TAppData = {taskList:[],statistic:[],settings,darkTheme:false};
 
   const storageAppData = localStorage.getItem('appData')||'';
   if (storageAppData){

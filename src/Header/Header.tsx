@@ -1,6 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './header.module.css';
+import {ThemeSwitch} from './ThemeSwitch/ThemeSwitch';
 
 export function Header(){
     return (
@@ -22,12 +22,15 @@ export function Header(){
 
                     pomodoro_box
                 </Link>
-                <Link className={`${styles.dashboardLink} link`} to="/dashboard">
-                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 20H14V4H10V20ZM4 20H8V12H4V20ZM16 9V20H20V9H16Z" />
-                    </svg>
-                    Статистика
-                </Link>
+                <div className={styles.tools}>
+                    <ThemeSwitch/>
+                    <Link className={`${styles.dashboardLink} link`} to="/dashboard">
+                        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 20H14V4H10V20ZM4 20H8V12H4V20ZM16 9V20H20V9H16Z" />
+                        </svg>
+                        Статистика
+                    </Link>
+                </div>
             </div>
         </header>
     );

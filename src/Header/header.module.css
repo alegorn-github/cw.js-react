@@ -27,6 +27,11 @@
     margin-right: 14px;
 }
 
+.tools {
+    display: flex;
+    align-items: center;
+}
+
 .dashboardLink {
     display: flex;
     align-items: flex-end;
