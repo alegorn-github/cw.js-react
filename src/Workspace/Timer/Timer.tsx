@@ -278,7 +278,7 @@ export function Timer({taskIndex}:ITimer){
             moveTimerCondition('Waiting');
             timerRemainMs = taskTime*60*1000;
             updateTimerRemain();
-        },[moveTimerCondition,updateTimerRemain]
+        },[moveTimerCondition,updateTimerRemain,taskTime]
     );
 
     const timerTik = useCallback( ()=>{
