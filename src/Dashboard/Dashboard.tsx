@@ -25,7 +25,7 @@ export const weekDays = ['Понедельник','Вторник','Среда',
 export const shortWeekDays = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 const yMarks = ['1ч 40мин','1ч 15мин','50мин','25мин'];
 
-const timeMultiplier = 60; // Each second is minute. For debugging only. Set it to 1 before deploy!
+const timeMultiplier = 1; // Each second is minute. For debugging only. Set it to 1 before deploy!
 const todayDay = (new Date()).getDay();
 
 export function Dashboard(){

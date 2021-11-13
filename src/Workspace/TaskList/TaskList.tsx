@@ -21,7 +21,15 @@ export function TaskList(){
         <div>
             <ul className={styles.taskList}>
                 { taskList.map((task, index)=>(
-                    <Task key={getRandomKey()} id={task.id} name={task.name} pomodoros={task.pomodoros} index={index} created={task.created||false} deleted={task.deleted||false}/>
+                    <Task key={getRandomKey()} 
+                        id={task.id} 
+                        name={task.name} 
+                        pomodoros={task.pomodoros} 
+                        completedPomodoros = {task.completedPomodoros}
+                        index={index} 
+                        created={task.created||false} 
+                        deleted={task.deleted||false}
+                    />
                 ))}
             </ul>
             <div className={styles.totalTime}>{

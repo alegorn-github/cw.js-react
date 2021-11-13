@@ -32,7 +32,7 @@
     align-items: center;
 }
 
-.dashboardLink {
+.headerLink {
     display: flex;
     align-items: center;
     font-size: 16px;
@@ -41,15 +41,19 @@
     transition: color var(--state-delay), fill var(--state-delay);
 }
 
-.dashboardLink > svg {
+.headerLink:not(:last-child){
+    margin-right: 15px;
+}
+
+.headerLink > svg {
     margin-right: 9px;
 }
 
-.dashboardLink, .dashboardLink:visited {
+.headerLink, .headerLink:visited {
     color: var(--red);
 }
 
-.dashboardLink:hover {
+.headerLink:hover {
     fill: var(--red-dark);
     color: var(--red-dark);
 }

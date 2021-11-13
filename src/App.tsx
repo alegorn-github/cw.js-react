@@ -1,10 +1,11 @@
 import 'normalize.css';
-import React, { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Header} from './Header';
 import { Workspace } from './Workspace/Workspace';
 import { Dashboard } from './Dashboard';
+import {Settings} from './Settings/Settings';
 import {changeTheme} from './tools/changeTheme';
 
 export type TDayStatistic = {
@@ -18,14 +19,17 @@ export type TWeekStatistic = Array<TDayStatistic>;
 export type TStatistic = Array<{monday:number, stat:TWeekStatistic}>;
 
 export type TSettings = {
-  timerUpdateIntervalMs: number,
-  taskTime: number,
-  shortbreakTime: number,
-  longBreakTime: number,
-  breaksForLongBreak: number,
-  addButtonTime: number,
-  maxPomodorosPerTask: number,
+  'timerUpdateIntervalMs': number,
+  'taskTime': number,
+  'shortbreakTime': number,
+  'longBreakTime': number,
+  'breaksForLongBreak': number,
+  'addButtonTime': number,
+  'maxPomodorosPerTask': number,
+  'enableNotifications': boolean,
 }
+
+export type TSetting = keyof TSettings;
 
 export type TTask = {
   id: string;
@@ -41,13 +45,14 @@ export type TAppData = {taskList:TTaskList,statistic:TStatistic,settings:TSettin
 export type TAppContext = [TAppData,(p:Partial<TAppData>)=>void]
 
 const settings:TSettings = {
-  timerUpdateIntervalMs: 300,
-  taskTime: 20/60,
-  shortbreakTime: 10/60,
-  longBreakTime: 20/60,
-  breaksForLongBreak: 3,
-  addButtonTime: 30/60,
-  maxPomodorosPerTask: 9,
+  'timerUpdateIntervalMs': 300,
+  'taskTime': 25,
+  'shortbreakTime': 5,
+  'longBreakTime': 20,
+  'breaksForLongBreak': 3,
+  'addButtonTime': 1,
+  'maxPomodorosPerTask': 9,
+  'enableNotifications': true
 }
 
 export const dayTemplate:TDayStatistic = {breaks:0,pausedS:0,pomodoroTimeS:0,pomodoros:0,workS:0};
@@ -63,6 +68,7 @@ function App() {
   const storageAppData = localStorage.getItem('appData')||'';
   if (storageAppData){
     initialAppData = JSON.parse(storageAppData);
+    initialAppData.statistic.reverse().filter((elem,index)=>index > 3).reverse();
   }
 
   const [appData,setAppData] = useState<TAppData>(initialAppData);
@@ -90,6 +96,9 @@ function App() {
           <Route path="/dashboard">
             <Dashboard></Dashboard>
           </Route>
+          <Route path="/settings">
+            <Settings></Settings>
+          </Route>
           <Route path="/">
             <Workspace></Workspace>
           </Route>
@@ -100,3 +109,5 @@ function App() {
 }
 
 export default App;
+
+

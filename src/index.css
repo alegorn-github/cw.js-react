@@ -64,7 +64,7 @@
     --purple-dark: #9C97D7;
     --blue: #C5F1FF;
     --blue-dark: #7FC2D7; */
-    --state-delay: 300;
+    --state-delay: 300ms;
 }
 
 .container {

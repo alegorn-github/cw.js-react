@@ -1,0 +1,89 @@
+.settings{
+    padding-top: 88px;
+    /* background-color: var(--white); */
+}
+
+.settings > h1 {
+    font-family: 'SFB';
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 33px;
+    color: var(--gray-dark-33);
+    text-align: center;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 25px;
+}
+
+.input {
+    /* display: block; */
+    width: 100px;
+    padding: 19px 15px;
+    border: none;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 17px;    
+    background: var(--gray-lightest-F4);
+    color: var(--gray-dark-33);
+    outline: none;
+}
+
+.input:hover,.input:focus {
+    outline:1px solid var(--gray-light-C4);
+}
+
+.span {
+    display: inline-block;
+    padding: 19px 15px;
+    width: 50%;
+    height: 100%;
+}
+
+.span:first-child{
+    text-align: right;
+}
+
+.checkbox {
+    position: absolute;
+    outline: none;
+    /* visibility: hidden; */
+    opacity: 0;
+}
+
+.styledCheckbox {
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 80px;
+    border-radius: 20px;
+    background-color: var(--gray-lightest-F4);
+    transition: background-color var(--state-delay);
+}
+
+.styledCheckbox::before{
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 18px;
+    background-color: var(--gray-light-C4);
+    transition: all var(--state-delay);
+}
+
+.checkbox:checked + .styledCheckbox{
+    background-color: var(--green);
+}
+
+.checkbox:checked + .styledCheckbox::before{
+    background-color: var(--green-dark);
+    left: 44px;
+}

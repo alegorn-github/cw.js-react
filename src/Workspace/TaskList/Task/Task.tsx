@@ -5,7 +5,7 @@ import { AppContext, TTask, TTaskList} from '../../../App';
 import { getClassName } from '../../../tools/getClassName';
 import { Modal } from '../../../Modal/Modal';
 
-export function Task({id,name,pomodoros,index:taskIndex=0,created,deleted}:Omit<TTask,"completedPomodoros">){
+export function Task({id,name,pomodoros,index:taskIndex=0,created,deleted,completedPomodoros}:TTask){
     const [appState,setAppState] = useContext(AppContext);
     const {taskList,settings} = appState;
     const {maxPomodorosPerTask} = settings;
@@ -18,10 +18,12 @@ export function Task({id,name,pomodoros,index:taskIndex=0,created,deleted}:Omit<
     const taskNameRef = useRef<HTMLInputElement>(null);
     const taskRef = useRef<HTMLLIElement>(null);
 
-    function enableButtons(pomodoros:number){
-        setAddButtonEnabled(pomodoros < maxPomodorosPerTask);
-        setExtractButtonEnabled(pomodoros > 1);
-    }
+    useEffect(
+        ()=>{
+            setAddButtonEnabled(pomodoros < maxPomodorosPerTask);
+            setExtractButtonEnabled(pomodoros > completedPomodoros + 1);
+        },[pomodoros,completedPomodoros,maxPomodorosPerTask]
+    );
 
     const saveState = useCallback((newTaskList:TTaskList=myTaskList)=>{
         setAppState({taskList:[...newTaskList]});
@@ -29,13 +31,11 @@ export function Task({id,name,pomodoros,index:taskIndex=0,created,deleted}:Omit<
 
     function addPomodoro(){
         myTaskList[taskIndex].pomodoros = myTaskList[taskIndex].pomodoros + 1;
-        enableButtons(myTaskList[taskIndex].pomodoros);
         saveState();
     }
 
     function extractPomodoro(){
         myTaskList[taskIndex].pomodoros = myTaskList[taskIndex].pomodoros - 1;
-        enableButtons(myTaskList[taskIndex].pomodoros);
         saveState();
     }
 

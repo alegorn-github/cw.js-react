@@ -57,6 +57,8 @@ export function Timer({taskIndex}:ITimer){
     const secondMinuteDigitRef = useRef<HTMLSpanElement>(null);
     const firstSecondDigitRef = useRef<HTMLSpanElement>(null);
     const secondSecondDigitRef = useRef<HTMLSpanElement>(null);
+    const [breakInSound] = useState<HTMLMediaElement>(new Audio('solemn-522.mp3'));
+    const [breakOutSound] = useState<HTMLMediaElement>(new Audio('break.mp3'));
 
     const savedWeekStat = appState.statistic.find((stat)=>stat.monday===monday)?.stat||weekTemplate();
     dayStat = savedWeekStat[weekDay];
@@ -271,7 +273,6 @@ export function Timer({taskIndex}:ITimer){
         updateTimerRemain();        
     },[saveStat,taskTime,timerCondition,updateTimerRemain]);
 
-
     useEffect(
         ()=>{
             clearInterval(timerInterval);
@@ -279,6 +280,32 @@ export function Timer({taskIndex}:ITimer){
             timerRemainMs = taskTime*60*1000;
             updateTimerRemain();
         },[moveTimerCondition,updateTimerRemain,taskTime]
+    );
+
+    const sendNotification = useCallback(
+        (title:string='Hi!',callback = ()=>{} )=>{
+            if (!appState.settings.enableNotifications) return;
+            const options = {
+                icon:'tomato.png',
+                body:title,
+                silent: true,
+            };
+            if (!("Notification" in window)) {
+                return;
+            }
+            else if (Notification.permission === "granted") {
+                new Notification("Pomodoro",options);
+                callback();
+            }
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission((permission) => {
+                    if (permission === "granted") {
+                        new Notification("Pomodoro",options);
+                        callback();
+                    }
+                });
+            }
+        },[appState.settings.enableNotifications]
     );
 
     const timerTik = useCallback( ()=>{
@@ -289,6 +316,7 @@ export function Timer({taskIndex}:ITimer){
             if (timerCondition === 'Running'){
                 let breakTime = (completedPomodoros % breaksForLongBreak === 0 && completedPomodoros > 0 ? longBreakTime: shortbreakTime)*60; 
                 completePomodoro();
+                sendNotification(`Помидор завершен. Отдохни!`,()=>{breakInSound.play()});                
                 if (currentTask.pomodoros <= completedPomodoros && taskIndex === appState.taskList.length - 1){
                     moveTimerCondition('Waiting');
                 }
@@ -298,11 +326,27 @@ export function Timer({taskIndex}:ITimer){
                 }
             }
             else if (timerCondition === 'Break'){
+                sendNotification(`Перерыв завершен. Поехали?`,()=>{breakOutSound.play()});                
                 moveTimerCondition('Waiting');
             }
         }
         updateTimerRemain();
-    },[appState.taskList.length,breaksForLongBreak,completePomodoro,longBreakTime,shortbreakTime,startTimer,stopTimer,taskIndex,timerCondition,timerUpdateIntervalMs,updateTimerRemain,moveTimerCondition]);
+    },[appState.taskList.length,
+        breaksForLongBreak,
+        completePomodoro,
+        longBreakTime,
+        shortbreakTime,
+        startTimer,
+        stopTimer,
+        taskIndex,
+        timerCondition,
+        timerUpdateIntervalMs,
+        updateTimerRemain,
+        moveTimerCondition,
+        breakInSound,
+        breakOutSound,
+        sendNotification
+    ]);
 
     const addTime = ()=>{
         if (timerRemainMs/60000 + addButtonTime  < 100 ){
