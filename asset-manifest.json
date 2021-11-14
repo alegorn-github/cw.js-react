@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/pomodoro/static/css/main.9a870f83.chunk.css",
-    "main.js": "/pomodoro/static/js/main.79440322.chunk.js",
-    "main.js.map": "/pomodoro/static/js/main.79440322.chunk.js.map",
-    "runtime-main.js": "/pomodoro/static/js/runtime-main.e92c1b9f.js",
-    "runtime-main.js.map": "/pomodoro/static/js/runtime-main.e92c1b9f.js.map",
-    "static/css/2.679831fc.chunk.css": "/pomodoro/static/css/2.679831fc.chunk.css",
-    "static/js/2.09aae869.chunk.js": "/pomodoro/static/js/2.09aae869.chunk.js",
-    "static/js/2.09aae869.chunk.js.map": "/pomodoro/static/js/2.09aae869.chunk.js.map",
-    "static/js/3.0e1fc556.chunk.js": "/pomodoro/static/js/3.0e1fc556.chunk.js",
-    "static/js/3.0e1fc556.chunk.js.map": "/pomodoro/static/js/3.0e1fc556.chunk.js.map",
-    "index.html": "/pomodoro/index.html",
-    "static/css/2.679831fc.chunk.css.map": "/pomodoro/static/css/2.679831fc.chunk.css.map",
-    "static/css/main.9a870f83.chunk.css.map": "/pomodoro/static/css/main.9a870f83.chunk.css.map",
-    "static/js/2.09aae869.chunk.js.LICENSE.txt": "/pomodoro/static/js/2.09aae869.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/pomodoro/static/media/SF-Compact-Display-Thin.f9b0ee6e.otf"
+    "main.css": "/cw.js-react/static/css/main.fa929aae.chunk.css",
+    "main.js": "/cw.js-react/static/js/main.79440322.chunk.js",
+    "main.js.map": "/cw.js-react/static/js/main.79440322.chunk.js.map",
+    "runtime-main.js": "/cw.js-react/static/js/runtime-main.2a7c2354.js",
+    "runtime-main.js.map": "/cw.js-react/static/js/runtime-main.2a7c2354.js.map",
+    "static/css/2.679831fc.chunk.css": "/cw.js-react/static/css/2.679831fc.chunk.css",
+    "static/js/2.09aae869.chunk.js": "/cw.js-react/static/js/2.09aae869.chunk.js",
+    "static/js/2.09aae869.chunk.js.map": "/cw.js-react/static/js/2.09aae869.chunk.js.map",
+    "static/js/3.0e1fc556.chunk.js": "/cw.js-react/static/js/3.0e1fc556.chunk.js",
+    "static/js/3.0e1fc556.chunk.js.map": "/cw.js-react/static/js/3.0e1fc556.chunk.js.map",
+    "index.html": "/cw.js-react/index.html",
+    "static/css/2.679831fc.chunk.css.map": "/cw.js-react/static/css/2.679831fc.chunk.css.map",
+    "static/css/main.fa929aae.chunk.css.map": "/cw.js-react/static/css/main.fa929aae.chunk.css.map",
+    "static/js/2.09aae869.chunk.js.LICENSE.txt": "/cw.js-react/static/js/2.09aae869.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/cw.js-react/static/media/SF-Compact-Display-Thin.f9b0ee6e.otf"
   },
   "entrypoints": [
-    "static/js/runtime-main.e92c1b9f.js",
+    "static/js/runtime-main.2a7c2354.js",
     "static/css/2.679831fc.chunk.css",
     "static/js/2.09aae869.chunk.js",
-    "static/css/main.9a870f83.chunk.css",
+    "static/css/main.fa929aae.chunk.css",
     "static/js/main.79440322.chunk.js"
   ]
 }
